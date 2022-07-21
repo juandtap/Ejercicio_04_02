@@ -5,8 +5,13 @@
 package ups.ejercicio_04_02.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ups.ejercicio_04_02.Model.Empresa;
 
 /**
@@ -15,6 +20,7 @@ import ups.ejercicio_04_02.Model.Empresa;
  */
 public class EmpresaService implements IEmpresaService{
     
+    private final String FILENAME="EmpresaData.dat";
     private static final List<Empresa> listaEmpresas = new ArrayList<>();
    
     @Override
@@ -24,6 +30,13 @@ public class EmpresaService implements IEmpresaService{
             throw new RuntimeException("Codigo de la empresa ya existe!");
         }
         listaEmpresas.add(empresa);
+        
+        try {
+            saveToFile(empresa);
+        } catch (IOException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return empresa;
     }
 
@@ -91,6 +104,21 @@ public class EmpresaService implements IEmpresaService{
             }
         }
         return false;
+    }
+     
+    private void saveToFile(Empresa empresa) throws IOException{
+        
+        ObjectOutputStream outputObject = null;
+        try {
+            outputObject = new ObjectOutputStream(
+                    new FileOutputStream(new File(DataManager.getDataPath()+FILENAME),true));
+            outputObject.writeObject(empresa);
+            outputObject.close();
+            
+        } catch (IOException e) {
+            outputObject.close();
+            throw new IOException("Error al escribir el archivo :"+e.getMessage());
+        }
     }
     
 }
