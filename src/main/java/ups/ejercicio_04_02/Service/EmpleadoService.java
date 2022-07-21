@@ -4,6 +4,7 @@
  */
 package ups.ejercicio_04_02.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import ups.ejercicio_04_02.Model.Departamento;
@@ -14,7 +15,23 @@ import ups.ejercicio_04_02.Model.Empleado;
  * @author Diego
  */
 public class EmpleadoService implements IEmpleadoService{
+    
+    //String para guardar ruta absoluta del proyecto
+    final String absolutePath;
+    
     private static final List<Empleado> listaEmpleados = new ArrayList<>();
+
+    public EmpleadoService() {
+        
+        File file = new File("");
+        
+        
+        this.absolutePath = file.getAbsolutePath();
+        System.out.println("abs path:>>>>> "+absolutePath);
+    }
+    
+    
+    
 
     @Override
     public Empleado crearEmpleado(Empleado empleado) {
@@ -93,5 +110,9 @@ public class EmpleadoService implements IEmpleadoService{
         }
         return false;
     }
+     
+     private void saveEmpresaFile(){
+         
+     }
     
 }

@@ -4,6 +4,7 @@
  */
 package ups.ejercicio_04_02.Model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -12,7 +13,7 @@ import java.time.LocalDate;
  *
  * @author Paul Aguaiza
  */
-public class Empresa {
+public class Empresa implements Serializable{
     
     private int codigo;
     private String nombre;

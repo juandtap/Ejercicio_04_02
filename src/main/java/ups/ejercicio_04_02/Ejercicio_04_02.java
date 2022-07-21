@@ -4,6 +4,7 @@
  */
 
 package ups.ejercicio_04_02;
+import ups.ejercicio_04_02.Service.DataManager;
 import ups.ejercicio_04_02.View.VentanaPrincipal;
 /**
  *
@@ -12,6 +13,7 @@ import ups.ejercicio_04_02.View.VentanaPrincipal;
 public class Ejercicio_04_02 {
 
     public static void main(String[] args) {
+        System.out.println("Ruta del proyecto: "+DataManager.getProjectPath());
         var ventanaPrincipal = new VentanaPrincipal();
         ventanaPrincipal.setVisible(true);
     }

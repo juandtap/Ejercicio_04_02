@@ -4,6 +4,7 @@
  */
 package ups.ejercicio_04_02.Model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
  *
  * @author Paul Aguaiza
  */
-public class Empleado {
+public class Empleado implements Serializable{
     private String cedula;
     private String nombre;
     private LocalDate fechaNacimiento;
