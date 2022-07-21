@@ -34,8 +34,9 @@ public class EmpresaService implements IEmpresaService{
         }
         listaEmpresas.add(empresa);
         
+        // guarda toda la lista de empresas en el archivo .dat
         try {
-            saveToFile(empresa);
+            saveToFile();
         } catch (IOException ex) {
             Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -89,12 +90,25 @@ public class EmpresaService implements IEmpresaService{
         listaEmpresas.get(posicion).setDireccion(empresaNueva.getDireccion());
         listaEmpresas.get(posicion).setFechaFundacion(empresaNueva.getFechaFundacion());
         
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public Empresa eliminarEmpresa(int codigo) {
         var posicion = getPositionEmpresa(getEmpresaByCode(codigo));
-        return listaEmpresas.remove(posicion);
+        var emp = listaEmpresas.remove(posicion);
+        
+        try {
+            saveToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return emp;
     }
 
     @Override
@@ -117,13 +131,24 @@ public class EmpresaService implements IEmpresaService{
         return false;
     }
      
-    private void saveToFile(Empresa empresa) throws IOException{
+    private void saveToFile() throws IOException{
         
         ObjectOutputStream outputObject = null;
+       
         try {
+         
+           
             outputObject = new ObjectOutputStream(
-                    new FileOutputStream(new File(DataManager.getDataPath()+FILENAME),true));
-            outputObject.writeObject(empresa);
+                    new FileOutputStream(new File(DataManager.getDataPath() + FILENAME)));
+             
+             
+             
+            for (var empresa : listaEmpresas) {
+                outputObject.writeObject(empresa);
+                System.out.println("entro aqui..");
+                
+            }
+
             outputObject.close();
             
         } catch (IOException e) {
