@@ -36,7 +36,7 @@ public class EmpresaService implements IEmpresaService{
         
         // guarda toda la lista de empresas en el archivo .dat
         try {
-            saveToFile();
+            saveObjectToFile(empresa);
         } catch (IOException ex) {
             Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,10 +90,11 @@ public class EmpresaService implements IEmpresaService{
         listaEmpresas.get(posicion).setDireccion(empresaNueva.getDireccion());
         listaEmpresas.get(posicion).setFechaFundacion(empresaNueva.getFechaFundacion());
         
+        // metodo para guardar toda la lista en archivo, sobreescribir
         try {
-            saveToFile();
-        } catch (IOException ex) {
-            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+           saveFile();
+        } catch (IOException e) {
+            
         }
     }
 
@@ -102,12 +103,12 @@ public class EmpresaService implements IEmpresaService{
         var posicion = getPositionEmpresa(getEmpresaByCode(codigo));
         var emp = listaEmpresas.remove(posicion);
         
+        // metodo para guardar toda la lista
         try {
-            saveToFile();
-        } catch (IOException ex) {
-            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+           saveFile();
+        } catch (IOException e) {
+            
         }
-        
         return emp;
     }
 
@@ -131,7 +132,7 @@ public class EmpresaService implements IEmpresaService{
         return false;
     }
      
-    private void saveToFile() throws IOException{
+    private void saveObjectToFile(Empresa empresa) throws IOException{
         
         ObjectOutputStream outputObject = null;
        
@@ -139,18 +140,11 @@ public class EmpresaService implements IEmpresaService{
          
            
             outputObject = new ObjectOutputStream(
-                    new FileOutputStream(new File(DataManager.getDataPath() + FILENAME)));
+                    new FileOutputStream(new File(DataManager.getDataPath() + FILENAME),true));
              
-             
-             
-            for (var empresa : listaEmpresas) {
                 outputObject.writeObject(empresa);
-                System.out.println("entro aqui..");
-                
-            }
-
-            outputObject.close();
-            
+                outputObject.close();
+     
         } catch (IOException e) {
             outputObject.close();
             throw new IOException("Error al escribir el archivo :"+e.getMessage());
@@ -181,6 +175,33 @@ public class EmpresaService implements IEmpresaService{
         return listEmpresa;
         
         
+    }
+    
+    private void saveFile() throws IOException{
+        
+        // este metodo sobreescribe el archivo despues de hacer una edicion/eliminacion a los objetos
+        // elimina el archivo primero
+        File filetoUpdate = new File(DataManager.getDataPath()+FILENAME);
+        filetoUpdate.delete();
+        //luego vuelve a crearlo con los cambios
+        
+        ObjectOutputStream objectOutput = null;
+        try {
+            objectOutput = new ObjectOutputStream(new FileOutputStream(new File(DataManager.getDataPath()+FILENAME),true));
+            
+            for (var emp : listaEmpresas) {
+                objectOutput.writeObject(emp);
+               
+            }
+            objectOutput.close();
+            
+            
+        } catch (IOException e) {
+            objectOutput.close();
+            throw new IOException("Error al actualizar el archivo :"+e.getMessage());
+        }
+        
+        System.out.println("archivo Empresa sobreescrito");
     }
     
 }
