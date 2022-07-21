@@ -19,13 +19,18 @@ public class DataManager {
     
     private static String absolutePath;
     private static File file;
-
+    private static String dataPath;
     
     public static String getProjectPath(){
         file = new File("");
         absolutePath = file.getAbsolutePath();
         return absolutePath;
-    } 
+    }
+    
+    public static String getDataPath(){
+        dataPath = getProjectPath() + "\\src\\main\\java\\ups\\ejercicio_04_02\\Files";
+        return  dataPath;
+    }
     
     
 }
