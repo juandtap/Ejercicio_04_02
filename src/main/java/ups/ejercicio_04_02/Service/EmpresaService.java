@@ -5,9 +5,12 @@
 package ups.ejercicio_04_02.Service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,7 +24,7 @@ import ups.ejercicio_04_02.Model.Empresa;
 public class EmpresaService implements IEmpresaService{
     
     private final String FILENAME="EmpresaData.dat";
-    private static final List<Empresa> listaEmpresas = new ArrayList<>();
+    private static  List<Empresa> listaEmpresas = new ArrayList<>();
    
     @Override
     public Empresa crearEmpresa(Empresa empresa) {
@@ -43,11 +46,19 @@ public class EmpresaService implements IEmpresaService{
     @Override
     public List<Empresa> listarEmpresas() {
         
-        if (listaEmpresas.isEmpty()) {
-            throw new RuntimeException("Lista de empresas vacia!");
+        try {
+            
+            listaEmpresas = readFromFile();
+            
+        } catch (ClassNotFoundException | IOException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        if (listaEmpresas.isEmpty()) {
+           throw new RuntimeException("Lista de empresas vacia!");
+        }
         return listaEmpresas;
+        
     }
 
     @Override
@@ -119,6 +130,32 @@ public class EmpresaService implements IEmpresaService{
             outputObject.close();
             throw new IOException("Error al escribir el archivo :"+e.getMessage());
         }
+    }
+    
+    private List<Empresa> readFromFile() throws ClassNotFoundException, IOException{
+        
+        List<Empresa> listEmpresa = new ArrayList<>();
+        
+        ObjectInputStream inputObject = null;
+        
+        try {
+           var fis = new FileInputStream(new File(DataManager.getDataPath()+FILENAME));
+           while(fis.available() > 0){
+               inputObject = new ObjectInputStream(fis);
+               var empresa = (Empresa) inputObject.readObject();
+               listEmpresa.add(empresa);
+           }
+           
+           inputObject.close();
+           
+        } catch (IOException e) {
+            throw new IOException("Error al leer el archivo :"+e.getMessage());
+        }
+        
+        
+        return listEmpresa;
+        
+        
     }
     
 }
