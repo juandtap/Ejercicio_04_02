@@ -14,7 +14,7 @@ public class Ejercicio_04_02 {
 
     public static void main(String[] args) {
         System.out.println("Ruta del proyecto: "+DataManager.getProjectPath());
-        System.out.println("Ruta para guardar los objetos : "+DataManager.getDataPath());
+        System.out.println("Ruta para guardar los objetos : "+DataManager.getDataPath());    
         var ventanaPrincipal = new VentanaPrincipal();
         ventanaPrincipal.setVisible(true);
     }

@@ -29,7 +29,8 @@ public class EmpresaVentana extends javax.swing.JInternalFrame {
         empresaController = new EmpresaController();
         this.jDesktopPane = jDesktopPane1;
         this.jButtonEditar.setEnabled(false);
-        
+        // carga los datos almancenados en el  archivo .dat al arrayList<Empresa>
+        this.empresaController.listarEmpresas();
     }
 
     /**

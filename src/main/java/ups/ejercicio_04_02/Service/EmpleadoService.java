@@ -16,22 +16,11 @@ import ups.ejercicio_04_02.Model.Empleado;
  */
 public class EmpleadoService implements IEmpleadoService{
     
-    //String para guardar ruta absoluta del proyecto
-    final String absolutePath;
+    
     
     private static final List<Empleado> listaEmpleados = new ArrayList<>();
 
-    public EmpleadoService() {
-        
-        File file = new File("");
-        
-        
-        this.absolutePath = file.getAbsolutePath();
-        System.out.println("abs path:>>>>> "+absolutePath);
-    }
-    
-    
-    
+   
 
     @Override
     public Empleado crearEmpleado(Empleado empleado) {

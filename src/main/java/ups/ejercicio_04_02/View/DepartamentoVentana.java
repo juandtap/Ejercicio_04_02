@@ -29,6 +29,8 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
         departamentoController =  new DepartamentoController();
         this.jDesktopPane = jDesktopPane;
         this.jButtonEditarDep.setEnabled(false);
+        //cargar los datos almacenados en el archivo .dat
+        this.departamentoController.listarDepartamentos();
     }
 
     /**
