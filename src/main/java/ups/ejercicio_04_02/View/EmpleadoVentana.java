@@ -29,7 +29,7 @@ public class EmpleadoVentana extends javax.swing.JInternalFrame {
         this.jDesktopPane = jDesktopPane;
         this.jButtonEdicion.setEnabled(false);
         // carga los datos almacenados en el archivo .dat
-        this.empleadoController.listarEmpleados();
+        //this.empleadoController.listarEmpleados();
     }
 
     /**
