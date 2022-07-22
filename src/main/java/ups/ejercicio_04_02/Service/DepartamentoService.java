@@ -4,10 +4,19 @@
  */
 package ups.ejercicio_04_02.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ups.ejercicio_04_02.Model.Departamento;
 import ups.ejercicio_04_02.Model.Empleado;
+
 
 /**
  *
@@ -15,7 +24,8 @@ import ups.ejercicio_04_02.Model.Empleado;
  */
 public class DepartamentoService implements IDepartamentoService{
     
-    private static final List<Departamento> listaDepartamentos = new ArrayList<>();
+    private final String PATH = DataManager.getDataPath()+"DepartamentoData.dat";
+    private static  List<Departamento> listaDepartamentos = new ArrayList<>();
 
     @Override
     public Departamento crearDepartamento(Departamento departamento) {
@@ -23,6 +33,13 @@ public class DepartamentoService implements IDepartamentoService{
            throw new RuntimeException("El codigo de departamento ("+departamento.getCodigo()+") ya existe");
         }
         listaDepartamentos.add(departamento);
+        
+        
+        try {
+           saveToFile();
+        } catch (IOException e) {
+             Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, e);
+        }
         return departamento; 
         
     }
@@ -30,6 +47,15 @@ public class DepartamentoService implements IDepartamentoService{
     @Override
     public List<Departamento> listarDepartamentos() {
        
+        try {
+            
+            listaDepartamentos = readFromFile();
+           
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Lista de departamentos vacia!");
+        }
+        
+        
         if (listaDepartamentos.isEmpty()) {
             throw new RuntimeException("Lista de departamentos vacia!");
         }
@@ -68,12 +94,27 @@ public class DepartamentoService implements IDepartamentoService{
        listaDepartamentos.get(posicion).asignarGerente(departamentoNew.getGerente());
        listaDepartamentos.get(posicion).setEmpresa(departamentoNew.getEmpresa());
        listaDepartamentos.get(posicion).setUbicacion(departamentoNew.getUbicacion());
+       
+       try {
+           saveToFile();
+        } catch (IOException e) {
+            
+        }
+    
     }
 
     @Override
     public Departamento eliminarDepartamento(int codigo) {
        var posicion = getPositionDepartamento(getDepartamentoByCode(codigo));
-       return listaDepartamentos.remove(posicion);
+       var dep = listaDepartamentos.remove(posicion);
+       
+        try {
+           saveToFile();
+        } catch (IOException e) {
+            
+        }
+       
+       return dep;
     }
 
     @Override
@@ -94,6 +135,62 @@ public class DepartamentoService implements IDepartamentoService{
             }
         }
         return false;
+    }
+      
+    private void saveToFile() throws IOException{
+        
+        ObjectOutputStream oos = null;
+       
+        try {
+           
+            oos = new ObjectOutputStream(new FileOutputStream(new File(PATH)));
+            
+            oos.writeObject(listaDepartamentos);
+            System.out.println("Datos de Departamentos Guardados !");
+            oos.close();
+     
+        } catch (IOException e) {
+            oos.close();
+            throw new IOException("Error al escribir el archivo :"+e.getMessage());
+        }
+    }
+    
+    
+    
+    
+    private List<Departamento> readFromFile() throws ClassNotFoundException, IOException{
+        
+        List<Departamento> listDeps = new ArrayList<>();
+        
+        ObjectInputStream ois = null;
+        FileInputStream fis = null;
+        try {
+           fis = new FileInputStream(new File(PATH));
+           
+           while(fis.available() > 0){
+              
+               ois = new ObjectInputStream(fis);
+               listDeps = (List<Departamento>)ois.readObject();
+              
+           }
+           ois.close();
+           fis.close();
+           
+           
+        } catch (IOException e) {
+           
+            ois.close();
+            fis.close();
+            
+            throw new IOException("Error al leer el archivo :"+e.getMessage());
+           
+            
+        }
+        
+        
+        return listDeps;
+        
+        
     }
     
 }

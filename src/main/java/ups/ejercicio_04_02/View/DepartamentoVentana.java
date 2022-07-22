@@ -4,6 +4,9 @@
  */
 package ups.ejercicio_04_02.View;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -24,13 +27,14 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
     private TableModel modeloTablaDepartamentos;
     public final JDesktopPane jDesktopPane;
     
-    public DepartamentoVentana(JDesktopPane jDesktopPane) {
+    public DepartamentoVentana(JDesktopPane jDesktopPane) throws IOException {
         initComponents();
         departamentoController =  new DepartamentoController();
         this.jDesktopPane = jDesktopPane;
         this.jButtonEditarDep.setEnabled(false);
         //cargar los datos almacenados en el archivo .dat
-        this.departamentoController.listarDepartamentos();
+        //this.departamentoController.listarDepartamentos();
+        //mostrarTablaDepartamentos();
     }
 
     /**
@@ -248,7 +252,7 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
              
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        } 
        
     }//GEN-LAST:event_jButtonMostrarDepartamentosActionPerformed
 
@@ -257,7 +261,7 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxEmpresasDepartamentoFocusGained
 
     private void jButtonEditarDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarDepActionPerformed
-        editar(jTableDep.getSelectedRow());
+        editar(jTableDep.getSelectedRow());      
     }//GEN-LAST:event_jButtonEditarDepActionPerformed
 
     private void agregar(){
@@ -329,7 +333,7 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
         }
     }
      
-     private void mostrarTablaDepartamentos(){
+     private void mostrarTablaDepartamentos() {
         var header = new String[5];
         
         header[0] = "Codigo";
@@ -366,7 +370,7 @@ public class DepartamentoVentana extends javax.swing.JInternalFrame {
         }
     }
     
-    private void editar(int posicion){
+    private void editar(int posicion) {
         DepartamentoVentanaEdicion departamentoVentanaEdicion = new DepartamentoVentanaEdicion(this.departamentoController.listarDepartamentos().get(posicion));
         this.jDesktopPane.add(departamentoVentanaEdicion);
         departamentoVentanaEdicion.setIconifiable(true);

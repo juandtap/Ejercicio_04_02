@@ -4,11 +4,13 @@
  */
 package ups.ejercicio_04_02.Model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Paul Aguaiza
  */
-public class Departamento {
+public class Departamento implements Serializable{
     private int codigo;
     private String Nombre;
     private Empleado gerente;

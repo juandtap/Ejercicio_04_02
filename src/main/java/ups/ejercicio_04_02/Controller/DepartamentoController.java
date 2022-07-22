@@ -4,6 +4,7 @@
  */
 package ups.ejercicio_04_02.Controller;
 
+import java.io.IOException;
 import java.util.List;
 import ups.ejercicio_04_02.Model.Departamento;
 import ups.ejercicio_04_02.Model.Empleado;
@@ -39,7 +40,8 @@ public class DepartamentoController {
         return departamentoService.crearDepartamento(new Departamento(codigo, nombre, empresa, ubicacion));
     }
     
-    public List<Departamento> listarDepartamentos(){
+    public List<Departamento> listarDepartamentos() {
+        
         return departamentoService.listarDepartamentos();
     }
     
